@@ -2,7 +2,7 @@ on:
     workflow_dispatch:
 env:
     HOST: localhost:30001
-    USERNAME: ems
+    USERNAME: pi
 jobs:
     deploy:
         runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
               run: |
                   mkdir -p ~/.remoteit
                   cat > ~/.remoteit/credentials <<'EOF'
-                  [default]
+                  [DEFAULT]
                   R3_ACCESS_KEY_ID=${{ secrets.R3_ACCESS_KEY_ID }}
                   R3_SECRET_ACCESS_KEY=${{ secrets.R3_SECRET_ACCESS_KEY }}
                   EOF
