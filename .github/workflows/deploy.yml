@@ -1,0 +1,37 @@
+on:
+    workflow_dispatch:
+env:
+    HOST: localhost:30001
+    USERNAME: ems
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Install remoteit CLI
+              run: |
+                  curl -L https://downloads.remote.it/cli/install_cli.sh | sudo bash
+                  remoteit version
+                  remoteit install
+
+            - name: Write remote.it credentials
+              run: |
+                  mkdir -p ~/.remoteit
+                  cat > ~/.remoteit/credentials <<'EOF'
+                  [default]
+                  R3_ACCESS_KEY_ID=${{ secrets.R3_ACCESS_KEY_ID }}
+                  R3_SECRET_ACCESS_KEY=${{ secrets.R3_SECRET_ACCESS_KEY }}
+                  EOF
+                  chmod 600 ~/.remoteit/credentials
+
+            - name: Connect remoteit
+              run: |
+                  chmod +x ./deploy/connect_remoteit.sh
+                  ./deploy/connect_remoteit.sh "raspberrypi" "SSH"
+            
+            - name: Deploy Application
+              working-directory: ./deploy
+              run: |
+                  ./deploy.sh
