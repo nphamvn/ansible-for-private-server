@@ -44,7 +44,7 @@ jobs:
                   R3_SECRET_ACCESS_KEY=6DvJ1up2yuCMQ6P2JMAmndRsMs0kRwyEOMhqNEPZ
                   EOF
                   chmod 600 ~/.remoteit/credentials
-                  remoteit account credentials
+                  remoteit account signin --user 'pvnam95@hotmail.com' --pass '${{ secrets.REMOTEIT_PASSWORD }}'
             - name: Get SSH Service Id
               shell: bash
               run: |
