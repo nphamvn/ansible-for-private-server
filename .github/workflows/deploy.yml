@@ -43,9 +43,10 @@ jobs:
                   chmod 600 ~/.remoteit/credentials
                   remoteit account credentials
             - name: Connect remoteit
+              shell: bash
               run: |
                   chmod +x ./deploy/connect_remoteit.sh
-                  ./deploy/connect_remoteit.sh "${{ secrets.R3_ACCESS_KEY_ID }}" "${{ secrets.R3_SECRET_ACCESS_KEY }}" "raspberrypi" "SSH"
+                  ./deploy/connect_remoteit.sh
 
             - name: Install Ansible
               run: |

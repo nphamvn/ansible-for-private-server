@@ -3,10 +3,10 @@
 
 set -e
 
-R3_ACCESS_KEY_ID="${1}"
+R3_ACCESS_KEY_ID="CJX27WASA6U5SVBOJY6W"
 #R3_SECRET_ACCESS_KEY="${2}"
 R3_SECRET_ACCESS_KEY="6DvJ1up2yuCMQ6P2JMAmndRsMs0kRwyEOMhqNEPZ"
-PLANT="${3}"
+PLANT="${3:-raspberrypi}"
 SSH_SERVICE_NAME="${4:-SSH}"
 echo "Using PLANT='${PLANT}' and SSH_SERVICE_NAME='${SSH_SERVICE_NAME}'"
 echo "R3_ACCESS_KEY_ID length='${#R3_ACCESS_KEY_ID}'"
@@ -56,4 +56,4 @@ fi
 echo "DEVICE_ID: ${DEVICE_ID}"
 echo "SSH_SERVICE_ID: ${SSH_SERVICE_ID}"
 # connect using remote.it CLI
-remoteit connection add --id "${SSH_SERVICE_ID}" --port 30001 --connectAtStart true
+#remoteit connection add --id "${SSH_SERVICE_ID}" --port 30001 --connectAtStart true
