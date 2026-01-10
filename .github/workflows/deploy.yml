@@ -30,7 +30,7 @@ jobs:
                   sudo chmod +x /usr/local/bin/remoteit
 
                   remoteit version
-                  remoteit install
+                  sudo remoteit install
 
             - name: Write remote.it credentials
               run: |
