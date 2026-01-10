@@ -45,10 +45,14 @@ jobs:
             - name: Connect remoteit
               run: |
                   chmod +x ./deploy/connect_remoteit.sh
-                  ./deploy/connect_remoteit.sh "raspberrypi" "SSH" "${{ secrets.R3_ACCESS_KEY_ID }}" "${{ secrets.R3_SECRET_ACCESS_KEY }}"
+                  ./deploy/connect_remoteit.sh "${{ secrets.R3_ACCESS_KEY_ID }}" "${{ secrets.R3_SECRET_ACCESS_KEY }}" "raspberrypi" "SSH"
 
+            - name: Install Ansible
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y ansible
+            
             - name: Deploy Application
               working-directory: ./deploy
               run: |
-                  chmod +x ./deploy.sh
-                  ./deploy.sh
+                  ansible-playbook playbook.yml
