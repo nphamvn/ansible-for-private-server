@@ -63,7 +63,7 @@ jobs:
             - name: Test SSH Connection
               shell: bash
               run: |
-                sshpass -p 'zzzz' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 30001 pi@localhost "echo 'SSH connection successful'"                
+                sshpass -p 'zzzz' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 30001 pi@localhost "echo 'Deployment successful!' > /home/pi/deployment_status.txt"     
             # - name: Install Ansible
             #   run: |
             #       sudo apt-get update
