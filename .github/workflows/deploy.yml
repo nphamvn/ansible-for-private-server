@@ -44,7 +44,7 @@ jobs:
                   R3_SECRET_ACCESS_KEY=6DvJ1up2yuCMQ6P2JMAmndRsMs0kRwyEOMhqNEPZ
                   EOF
                   chmod 600 ~/.remoteit/credentials
-                  remoteit account signin --user 'pvnam95@hotmail.com' --pass '${{ secrets.REMOTEIT_PASSWORD }}'
+                  sudo remoteit account signin --user 'pvnam95@hotmail.com' --pass '${{ secrets.REMOTEIT_PASSWORD }}'
             - name: Get SSH Service Id
               shell: bash
               run: |
@@ -52,8 +52,8 @@ jobs:
                   ./deploy/connect_remoteit.sh "CJX27WASA6U5SVBOJY6W" "6DvJ1up2yuCMQ6P2JMAmndRsMs0kRwyEOMhqNEPZ" "ec2" "SSH"
             - name: Connect
               run: |
-                remoteit connection add --id "90:00:00:00:00:31:07:C8" --port 30001 --p2p true
-                remoteit connection connect --id "90:00:00:00:00:31:07:C8"
+                sudo remoteit connection add --id "90:00:00:00:00:31:07:C8" --port 30001 --p2p true
+                sudo remoteit connection connect --id "90:00:00:00:00:31:07:C8"
                 remoteit status
             - name: Install Ansible
               run: |
