@@ -1,10 +1,12 @@
 #!/bin/bash
-source ~/.remoteit/credentials || true # littel hack to get R3_ACCESS_KEY_ID and R3_SECRET_ACCESS_KEY into the script
+#source ~/.remoteit/credentials || true # littel hack to get R3_ACCESS_KEY_ID and R3_SECRET_ACCESS_KEY into the script
 
 set -e
 
 PLANT="${1}"
 SSH_SERVICE_NAME="${2}"
+R3_ACCESS_KEY_ID="${3}"
+R3_SECRET_ACCESS_KEY="${4}"
 
 SECRET=`echo ${R3_SECRET_ACCESS_KEY} | base64 --decode`
 

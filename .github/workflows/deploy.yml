@@ -44,7 +44,7 @@ jobs:
             - name: Connect remoteit
               run: |
                   chmod +x ./deploy/connect_remoteit.sh
-                  ./deploy/connect_remoteit.sh "raspberrypi" "SSH"
+                  ./deploy/connect_remoteit.sh "raspberrypi" "SSH" "${{ secrets.R3_ACCESS_KEY_ID }}" "${{ secrets.R3_SECRET_ACCESS_KEY }}"
 
             - name: Deploy Application
               working-directory: ./deploy
