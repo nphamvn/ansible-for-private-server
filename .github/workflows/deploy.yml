@@ -10,11 +10,26 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Install remoteit CLI
+            - name: Install remote.it CLI
+              shell: bash
               run: |
-                  curl -L https://downloads.remote.it/cli/install_cli.sh | sudo bash
+                  set -euo pipefail
+
+                  # Pick the right binary for runner arch
+                  ARCH="$(uname -m)"
+                  case "$ARCH" in
+                  x86_64|amd64) BIN_URL="https://downloads.remote.it/cli/latest/remoteit.x86_64-linux" ;;
+                  aarch64|arm64) BIN_URL="https://downloads.remote.it/cli/latest/remoteit.aarch64-linux" ;;
+                  *)
+                      echo "Unsupported arch: $ARCH"
+                      exit 1
+                      ;;
+                  esac
+
+                  sudo curl -fsSL "$BIN_URL" -o /usr/local/bin/remoteit
+                  sudo chmod +x /usr/local/bin/remoteit
+
                   remoteit version
-                  remoteit install
 
             - name: Write remote.it credentials
               run: |
@@ -30,7 +45,7 @@ jobs:
               run: |
                   chmod +x ./deploy/connect_remoteit.sh
                   ./deploy/connect_remoteit.sh "raspberrypi" "SSH"
-            
+
             - name: Deploy Application
               working-directory: ./deploy
               run: |
