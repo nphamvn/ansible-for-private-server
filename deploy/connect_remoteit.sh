@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
 
-# Load .env nếu có (local)
+# Load .env (for local run)
 if [ -f ".env" ]; then
   echo "Loading .env file"
   set -a          # auto export
   source .env
   set +a
 fi
+
 SSH_SERVICE_NAME=${SSH_SERVICE_NAME:-"SSH"}
 echo "Finding ssh service id for plant '${PLANT}' using service name '${SSH_SERVICE_NAME}'"
 
@@ -59,3 +59,31 @@ fi
 
 echo "DEVICE_ID: ${DEVICE_ID}"
 echo "SSH_SERVICE_ID: ${SSH_SERVICE_ID}"
+remoteit connection add --id ${SSH_SERVICE_ID} --port 30001 --name "ssh" --connectAtStart true
+
+# Wait for connection to be established
+INTERVAL=5
+TIMEOUT=60
+ELAPSED=0
+
+while true; do
+  if remoteit status -j | jq -e '
+    .data.connections[]
+    | select(.addressHost=="ssh.at.remote.it"
+             and .addressPort==30001
+             and .state==4)
+  ' > /dev/null; then
+    echo "✅ Connection ssh.at.remote.it:30001 is CONNECTED (state=4)"
+    break
+  fi
+
+  if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+    echo "❌ Timeout after ${TIMEOUT}s waiting for connection"
+    exit 1
+  fi
+
+  sleep "$INTERVAL"
+  ELAPSED=$((ELAPSED + INTERVAL))
+done
+
+sleep 2
