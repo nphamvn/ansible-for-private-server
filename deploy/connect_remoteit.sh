@@ -12,7 +12,11 @@ fi
 SSH_SERVICE_NAME=${SSH_SERVICE_NAME:-"SSH"}
 echo "Finding ssh service id for plant '${PLANT}' using service name '${SSH_SERVICE_NAME}'"
 
-SECRET=`echo ${R3_SECRET_ACCESS_KEY} | base64 --decode`
+SECRET=$(
+  printf '%s' "$R3_SECRET_ACCESS_KEY" \
+  | tr '_-' '/+' \
+  | base64 --decode
+)
 
 HOST="api.remote.it"
 URL_PATH="graphql/v1"
