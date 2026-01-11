@@ -30,6 +30,7 @@ jobs:
         id: get_configs
         run: |
           NETWORK=$(jq -r --arg PLANT "$PLANT" '.plants[] | select(.id == $PLANT) | .network' ./deploy/configs.json)
+          echo "network=$NETWORK"
           echo "network=$NETWORK" >> "$GITHUB_OUTPUT"
 
       - name: Install remote.it CLI and sign in
