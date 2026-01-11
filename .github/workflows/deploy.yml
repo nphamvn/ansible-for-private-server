@@ -88,3 +88,17 @@ jobs:
           PLANT: ${{ github.event.inputs.plant }}
           VERSION: ${{ github.event.inputs.version }}
           DEPLOY_GUI: ${{ github.event.inputs.deploy_gui }}
+  post_deploy:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Deployment Status
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "Deployment succeeded with version ${{ github.event.inputs.version }} to plant ${{ github.event.inputs.plant }}"
+            # Add notification logic here (e.g., send to Slack, email, etc.)
+          else
+            echo "Deployment failed"
+            # Add failure notification logic here
+          fi
