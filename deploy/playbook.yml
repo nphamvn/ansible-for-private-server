@@ -10,9 +10,6 @@
     ansible_connection: ssh
 
   tasks:
-    - name: Test connection
-      ansible.builtin.ping:
-
     - name: Who am I
       ansible.builtin.command: whoami
       register: whoami
