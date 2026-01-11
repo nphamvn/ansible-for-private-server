@@ -53,8 +53,8 @@ jobs:
                   ./deploy/connect_remoteit.sh
               env:
                   PLANT: ${{ env.PLANT }}
-                  R3_ACCESS_KEY_ID: ${{ secrets.R3_ACCESS_KEY_ID }}
-                  R3_SECRET_ACCESS_KEY: ${{ secrets.R3_SECRET_ACCESS_KEY }}
+                  R3_ACCESS_KEY_ID: P6WM6QP2G7V7AQXVEIRV
+                  R3_SECRET_ACCESS_KEY: jVFRRmMFHmAv3qblg0PPs8t-p0K3fo-ErrLoosZP
             - name: Connect
               run: |
                 sudo remoteit connection add --id 90:00:00:00:00:2A:D4:1E --port 30001 --p2p true && sleep 30 && \
