@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+set -x
 
 # Load .env nếu có (local)
 if [ -f ".env" ]; then
