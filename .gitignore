@@ -1,1 +1,6 @@
 .env
+.terraform
+.DS_Store
+*.ovpn
+*.pem
+*.key

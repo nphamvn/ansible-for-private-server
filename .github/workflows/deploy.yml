@@ -21,6 +21,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +38,7 @@ jobs:
           echo "network=$NETWORK" >> "$GITHUB_OUTPUT"
         env:
           PLANT: ${{ github.event.inputs.plant }}
-
+      # Network Connection Steps::Start
       - name: Install remote.it CLI and sign in
         if: steps.get_configs.outputs.network == 'remoteit'
         shell: bash
@@ -72,13 +77,36 @@ jobs:
           R3_SECRET_ACCESS_KEY: ${{ secrets.R3_SECRET_ACCESS_KEY }}
           LOCAL_PORT: 30001
 
+      - name: Configure AWS credentials
+        if: steps.get_configs.outputs.network == 'vpn'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::075313985331:role/github-actions-secrets-role
+          aws-region: ap-northeast-1
+
+      - name: Get OpenVPN config
+        if: steps.get_configs.outputs.network == 'vpn'
+        run: |
+          aws secretsmanager get-secret-value \
+            --secret-id openvpn-client \
+            --query SecretString \
+            --output text > client.ovpn
+          echo "::add-mask::$(head -n 1 client.ovpn)"
+          chmod 600 client.ovpn
+
       - name: Install OpenVPN client and connect
         if: steps.get_configs.outputs.network == 'vpn'
         run: |
           sudo apt-get update && sudo apt-get install -y openvpn && \
-          sudo openvpn --config ./deploy/gha_runner.ovpn --daemon
+          sudo openvpn --config client.ovpn --daemon && \
           sleep 10
 
+      - name: Cleanup
+        if: always() && steps.get_configs.outputs.network == 'vpn'
+        run: |
+          sudo pkill openvpn || true
+          rm -f client.ovpn
+      # Network Connection Steps::End
       - name: Install Ansible
         run: |
           sudo apt-get update && sudo apt-get install -y ansible
