@@ -72,6 +72,13 @@ jobs:
           R3_SECRET_ACCESS_KEY: ${{ secrets.R3_SECRET_ACCESS_KEY }}
           LOCAL_PORT: 30001
 
+      - name: Install OpenVPN client and connect
+        if: steps.get_configs.outputs.network == 'vpn'
+        run: |
+          sudo apt-get update && sudo apt-get install -y openvpn && \
+          sudo openvpn --config ./deploy/gha_runner.ovpn --daemon
+          sleep 10
+
       - name: Install Ansible
         run: |
           sudo apt-get update && sudo apt-get install -y ansible
@@ -82,8 +89,8 @@ jobs:
           ansible-playbook playbook.yml
         env:
           # Connection specific variables
-          ANSIBLE_HOST: ${{ steps.get_configs.outputs.network == 'remoteit' && 'localhost' || 'todo' }}
-          ANSIBLE_PORT: ${{ steps.get_configs.outputs.network == 'remoteit' && '30001' || 'todo' }}
+          ANSIBLE_HOST: ${{ steps.get_configs.outputs.network == 'remoteit' && 'localhost' || '10.8.0.4' }}
+          ANSIBLE_PORT: ${{ steps.get_configs.outputs.network == 'remoteit' && '30001' || '22' }}
           ANSIBLE_USER: ${{ vars.SERVER_USERNAME }}
           ANSIBLE_SSH_PASS: ${{ secrets.SERVER_PASSWORD }}
           ANSIBLE_HOST_KEY_CHECKING: "False"

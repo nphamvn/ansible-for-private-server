@@ -2,7 +2,7 @@
     "plants": [
         {
             "id": "raspberrypi",
-            "network": "remoteit"
+            "network": "vpn"
         },
         {
             "id": "ec2",
